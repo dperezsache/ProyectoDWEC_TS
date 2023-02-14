@@ -4,7 +4,8 @@
 	@license GPL-3.0-or-later
 **/
 
-import {Vista} from './vista.js';
+import { Controlador } from '../controller/app.js';
+import { Vista } from './vista.js';
 
 /**
 	Vista de la barra de búsqueda.
@@ -12,12 +13,15 @@ import {Vista} from './vista.js';
 **/
 export class VistaBarraBusqueda extends Vista 
 {
+	private campoBuscar: HTMLInputElement;
+	private botonBuscar: HTMLButtonElement;
+
 	/**
 		Constructor de la clase.
 		@param {Controlador} controlador Controlador de la vista.
 		@param {HTMLDivElement} div Div de HTML en el que se desplegará la vista.
 	**/
-    constructor(controlador, div) 
+    constructor(controlador: Controlador, div: HTMLDivElement) 
 	{
         super(controlador, div);
 

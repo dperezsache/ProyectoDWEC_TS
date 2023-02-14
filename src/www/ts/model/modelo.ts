@@ -4,18 +4,36 @@
 	@license GPL-3.0-or-later
 **/
 
+import { Controlador } from "../controller/app";
+
+interface Componente {
+	id: number;
+	nombre: string;
+	fecha: Date;
+	precio: string; 
+	descripcion: string; 
+	tipo: string; 
+	seguro1: boolean; 
+	seguro2: boolean; 
+	seguro3: boolean;
+	imagen: string;
+}
+
 /**
 	Clase Modelo.
 	Gestiona los datos de la aplicación.
 **/
 export class Modelo 
 {
-    constructor(controlador) 
+	private controlador: Controlador;
+	private callbacks: Function[];
+	private listaComponentes!: Componente[];
+	private db!: IDBDatabase;
+
+    constructor(controlador: Controlador) 
 	{
 		this.controlador = controlador;
 		this.callbacks = [];
-		this.listaComponentes;
-		this.db;
 		this.conectarDB();
     }
 
@@ -24,16 +42,20 @@ export class Modelo
 	**/
 	conectarDB() 
 	{
-		const peticion = window.indexedDB.open('ComponentesDB', 1);
+		const peticion: IDBOpenDBRequest = window.indexedDB.open('ComponentesDB', 1);
 
 		peticion.onsuccess = (event) => {
-			this.db = event.target.result;
-			this.obtenerRegistros();
+			if(event.target != null) {
+				this.db = <IDBDatabase>event.target;
+				this.obtenerRegistros();
+			}
 		}
 
 		peticion.onupgradeneeded = (event) => {
-			this.db = event.target.result;
-			this.db.createObjectStore('tablaComponentes', { keyPath: 'id', autoIncrement: true });
+			if(event.target != null) {
+				this.db = <IDBDatabase>event.target;
+				this.db.createObjectStore('tablaComponentes', { keyPath: 'id', autoIncrement: true });
+			}
 		}
 
 		peticion.onerror = () => console.error('Error al conectar con la BBDD');
@@ -43,7 +65,7 @@ export class Modelo
 		Registra un objeto para informarle de los cambios en el Modelo.
 		@param {Function} callback Función de callback que será llamada cuando cambien los datos.
 	**/
-	registrar(callback) 
+	registrar(callback: Function) 
 	{
 		this.callbacks.push(callback);
 	}
@@ -59,17 +81,17 @@ export class Modelo
 
 	/**
 	 	Insertar registro en la BD.
-		@param {String} nombre Nombre del componente.
-		@param {Date} fecha Fecha de lanzamiento.
-		@param {Number} precio Precio del componente.
-		@param {String} descripcion Descripción del componente.
-		@param {Number} tipo Tipo del componente.
+		@param {string} nombre Nombre del componente.
+		@param {string} fecha Fecha de lanzamiento.
+		@param {string} precio Precio del componente.
+		@param {string} descripcion Descripción del componente.
+		@param {string} tipo Tipo del componente.
 		@param {File} imagen Imagen del componente.
-		@param {Boolean} seguro1 Seguro nº 1.
-		@param {Boolean} seguro2 Seguro nº 2.
-		@param {Boolean} seguro3 Seguro nº 3.
+		@param {boolean} seguro1 Seguro nº 1.
+		@param {boolean} seguro2 Seguro nº 2.
+		@param {boolean} seguro3 Seguro nº 3.
 	**/
-	insertar(nombre, fecha, precio, descripcion, tipo, imagen, seguro1, seguro2, seguro3) 
+	insertar(nombre:string, fecha:string, precio:string, descripcion:string, tipo:string, imagen:File, seguro1:boolean, seguro2:boolean, seguro3:boolean) 
 	{
 		// Transformar imagen a base64
 		let reader = new FileReader();
@@ -77,13 +99,13 @@ export class Modelo
 
 		// Generar objeto del componente
 		reader.onload = () => {
-			const componente = {
+			const componente: Object = {
 				'nombre': nombre,
 				'fecha': fecha,
 				'precio': precio,
 				'descripcion': descripcion,
 				'tipo': tipo,
-				'imagen': reader.result,
+				'imagen': <string>reader.result,
 				'seguro1': seguro1,
 				'seguro2': seguro2,
 				'seguro3': seguro3
@@ -96,43 +118,45 @@ export class Modelo
 
 	/**
 	 	Obtener componente usando el ID, para después poder actualizarlo.
-		@param {Number} id ID del componente.
-		@param {String} nombre Nombre del componente.
-		@param {Date} fecha Fecha de lanzamiento.
-		@param {Number} precio Precio del componente.
-		@param {String} descripcion Descripción del componente.
-		@param {Number} tipo Tipo del componente.
+		@param {number} id ID del componente.
+		@param {string} nombre Nombre del componente.
+		@param {string} fecha Fecha de lanzamiento.
+		@param {string} precio Precio del componente.
+		@param {string} descripcion Descripción del componente.
+		@param {string} tipo Tipo del componente.
 		@param {File} imagen Imagen del componente.
-		@param {Boolean} seguro1 Seguro nº 1.
-		@param {Boolean} seguro2 Seguro nº 2.
-		@param {Boolean} seguro3 Seguro nº 3.
+		@param {boolean} seguro1 Seguro nº 1.
+		@param {boolean} seguro2 Seguro nº 2.
+		@param {boolean} seguro3 Seguro nº 3.
 	**/
-	procesarComponente(id, nombre, fecha, precio, descripcion, tipo, imagen, seguro1, seguro2, seguro3)
+	procesarComponente(id:number, nombre:string, fecha:string, precio:string, descripcion:string, tipo:string, imagen:File, seguro1:boolean, seguro2:boolean, seguro3:boolean)
 	{
-		const peticion = this.db.transaction('tablaComponentes', 'readwrite').objectStore('tablaComponentes').get(parseInt(id));
+		const peticion = this.db.transaction('tablaComponentes', 'readwrite').objectStore('tablaComponentes').get(<IDBValidKey>id);
 		peticion.onsuccess = (event) => {
-			const datos = event.target.result;
-			this.actualizarComponente(datos, nombre, fecha, precio, descripcion, tipo, imagen, seguro1, seguro2, seguro3);
+			if(event.target != null) {
+				const datos = <Componente>(event.target as Object);
+				this.actualizarComponente(datos, nombre, fecha, precio, descripcion, tipo, imagen, seguro1, seguro2, seguro3);
+			}
 		}
 	}
 
 	/**
 	 	Actualizar los datos de un componente de la base de datos.
-		@param {Object} datos Objeto con los datos.
-		@param {String} nombre Nombre del componente.
-		@param {Date} fecha Fecha de lanzamiento.
-		@param {Number} precio Precio del componente.
-		@param {String} descripcion Descripción del componente.
-		@param {Number} tipo Tipo del componente.
+		@param {Componente} datos Objeto con los datos.
+		@param {string} nombre Nombre del componente.
+		@param {string} fecha Fecha de lanzamiento.
+		@param {string} precio Precio del componente.
+		@param {string} descripcion Descripción del componente.
+		@param {string} tipo Tipo del componente.
 		@param {File} imagen Imagen del componente.
-		@param {Boolean} seguro1 Seguro nº 1.
-		@param {Boolean} seguro2 Seguro nº 2.
-		@param {Boolean} seguro3 Seguro nº 3.
+		@param {boolean} seguro1 Seguro nº 1.
+		@param {boolean} seguro2 Seguro nº 2.
+		@param {boolean} seguro3 Seguro nº 3.
 	**/
-	actualizarComponente(datos, nombre, fecha, precio, descripcion, tipo, imagen, seguro1, seguro2, seguro3) 
+	actualizarComponente(datos:Componente, nombre:string, fecha:string, precio:string, descripcion:string, tipo:string, imagen:File, seguro1:boolean, seguro2:boolean, seguro3:boolean) 
 	{
 		datos.nombre = nombre;
-		datos.fecha = fecha;
+		datos.fecha = new Date(fecha);
 		datos.precio = precio;
 		datos.descripcion = descripcion;
 		datos.tipo = tipo;
@@ -143,7 +167,7 @@ export class Modelo
 		let reader = new FileReader();
 		reader.readAsDataURL(imagen);
 		reader.onload = () => {
-			datos.imagen = reader.result;
+			datos.imagen = (reader.result as string);
 			const peticion = this.db.transaction('tablaComponentes', 'readwrite').objectStore('tablaComponentes').put(datos);
 			peticion.onsuccess = () => this.obtenerRegistros();
 		}
@@ -151,17 +175,16 @@ export class Modelo
 
 	/**
 		Elimina un registro de la BBDD.
-		@param {Number} id Nº identificador del registro a eliminar.
+		@param {number} id Nº identificador del registro a eliminar.
 	**/
-	borrar(id)
+	borrar(id:number)
 	{
-		const peticion = this.db.transaction('tablaComponentes', 'readwrite').objectStore('tablaComponentes').delete(id);
+		const peticion = this.db.transaction('tablaComponentes', 'readwrite').objectStore('tablaComponentes').delete(<IDBValidKey>id);
 		peticion.onsuccess = () => this.obtenerRegistros();
 	}
 
 	/**
 		Devuelve los registros de la base de datos a un array en el modelo, después llama a los callbacks.
-		@returns {Array} Datos de la BBDD.
 	**/
 	obtenerRegistros() 
 	{
@@ -175,9 +198,9 @@ export class Modelo
 
 	/**
 		Busca componentes que contengan el nombre o parte del nombre.
-		@param {String} nombre Nombre del componente.
+		@param {string} nombre Nombre del componente.
 	**/
-	buscar(nombre)
+	buscar(nombre:string)
 	{
 		if(!nombre)	// Si el nombre está en blanco, recuperar los registros.
 		{
@@ -204,9 +227,9 @@ export class Modelo
 
 	/**
 		Devuelve la lista local de componentes.
-		@returns {Array} Lista.
+		@returns {Componente[]} Lista.
 	**/
-	getLista() 
+	getLista():Componente[]
 	{
 		return this.listaComponentes;
 	}

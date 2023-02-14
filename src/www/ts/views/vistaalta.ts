@@ -4,7 +4,8 @@
 	@license GPL-3.0-or-later
 **/
 
-import {Vista} from './vista.js';
+import { Controlador } from '../controller/app';
+import { Vista } from './vista';
 
 /**
 	Vista del alta.
@@ -12,12 +13,25 @@ import {Vista} from './vista.js';
 **/
 export class VistaAlta extends Vista 
 {
+	private campoNombre: HTMLInputElement;
+	private campoFecha: HTMLInputElement;
+	private campoPrecio: HTMLInputElement;
+	private campoDescripcion: HTMLTextAreaElement;
+	private campoTipo: HTMLSelectElement;
+	private campoImagen: HTMLInputElement;
+	private seguro1: HTMLInputElement;
+	private seguro2: HTMLInputElement;
+	private seguro3: HTMLInputElement;
+	private botonCancelar: HTMLButtonElement;
+	private botonAceptar: HTMLButtonElement;
+	private parrafoAviso: HTMLParagraphElement;
+
 	/**
 		Constructor de la clase.
 		@param {Controlador} controlador Controlador de la vista.
 		@param {HTMLDivElement} div Div de HTML en el que se desplegará la vista.
 	**/
-	constructor(controlador, div) 
+	constructor(controlador: Controlador, div: HTMLDivElement) 
 	{
         super(controlador, div);
 
@@ -33,7 +47,7 @@ export class VistaAlta extends Vista
 		this.seguro3 = this.div.getElementsByTagName('input')[6];
 		this.botonCancelar = this.div.getElementsByTagName('button')[0];
 		this.botonAceptar = this.div.getElementsByTagName('button')[1];
-		this.parrafoAviso = this.div.getElementsByClassName('pAviso')[0];
+		this.parrafoAviso = this.div.getElementsByTagName('p')[0];
 		
 		this.botonAceptar.onclick = this.aceptar.bind(this);
 		this.botonCancelar.onclick = this.cancelar.bind(this);
@@ -71,7 +85,7 @@ export class VistaAlta extends Vista
 		}
 
 		// Validación precio
-		if (this.campoPrecio.value && !isNaN(this.campoPrecio.value) && this.campoPrecio.value > 0) 
+		if (this.campoPrecio.value && !isNaN(parseInt(this.campoPrecio.value)) && parseInt(this.campoPrecio.value) > 0) 
 		{
 			cont++;
 			this.campoPrecio.style.border = colorOk;
@@ -82,7 +96,7 @@ export class VistaAlta extends Vista
 		}
 
 		// Validación tipo
-		if (this.campoTipo.value != -1)
+		if (parseInt(this.campoTipo.value) != -1)
 		{
 			cont++;
 			this.campoTipo.style.border = colorOk;
@@ -104,7 +118,7 @@ export class VistaAlta extends Vista
 		}
 
 		// Validación imagen
-		if (this.campoImagen.files[0] != null)
+		if (this.campoImagen.files != null)
 		{
 			cont++;
 			this.campoImagen.style.border = colorOk;
@@ -127,7 +141,7 @@ export class VistaAlta extends Vista
 				this.campoPrecio.value,
 				this.campoDescripcion.value, 
 				this.campoTipo.value,
-				this.campoImagen.files[0], 
+				this.campoImagen.files![0], 
 				this.seguro1.checked,
 				this.seguro2.checked,
 				this.seguro3.checked
@@ -150,14 +164,14 @@ export class VistaAlta extends Vista
 		this.campoFecha.value = '';
 		this.campoPrecio.value = '';
 		this.campoDescripcion.value = '';
-		this.campoTipo.value = -1;
+		this.campoTipo.value = '-1';
 		this.campoImagen.value = '';
 		this.seguro1.checked = false;
 		this.seguro2.checked = false;
 		this.seguro3.checked = false;
 	}
 
-	mostrar(ver)
+	mostrar(ver:boolean)
 	{
 		super.mostrar(ver);
 		this.parrafoAviso.style.display = 'none';

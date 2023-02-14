@@ -1,12 +1,24 @@
-import { Modelo } from "../modelos/modelo.js";
-import { VistaAlta } from "../vistas/vistaalta.js";
-import { VistaDivBotones } from "../vistas/vistadivbotones.js";
-import { VistaListado } from "../vistas/vistalistado.js";
-import { VistaModificar } from "../vistas/vistamodificar.js";
-import { VistaBarraBusqueda } from "../vistas/vistabarrabusqueda.js";
+import { Modelo } from "../model/modelo";
+import { VistaAlta } from "../views/vistaalta";
+import { VistaDivBotones } from "../views/vistadivbotones";
+import { VistaListado } from "../views/vistalistado";
+import { VistaModificar } from "../views/vistamodificar";
+import { VistaBarraBusqueda } from "../views/vistabarrabusqueda";
 
-class Controlador 
+export class Controlador 
 {
+	private modelo!: Modelo;
+	private divBotones!: HTMLDivElement;
+	private divBarraBusqueda!: HTMLDivElement;
+	private divAlta!: HTMLDivElement;
+	private divListado!: HTMLDivElement;
+	private divModificar!: HTMLDivElement;
+	private vistaDivBotones!: VistaDivBotones;
+	private vistaBarraBusqueda!: VistaBarraBusqueda;
+	private vistaAlta!: VistaAlta;
+	private vistaListado!: VistaListado;
+	private vistaModificar!: VistaModificar;
+
     /**
 	 *	Constructor de la clase.
 	 *	Llama al método iniciar al cargarse la página.
@@ -24,11 +36,11 @@ class Controlador
     {
         this.modelo = new Modelo(this);
 
-        this.divBotones = document.getElementById('divBotones');
-        this.divBarraBusqueda = document.getElementById('divBusqueda');
-        this.divAlta = document.getElementById('divAlta');
-        this.divListado = document.getElementById('divListado');
-        this.divModificar = document.getElementById('divModificar');
+        this.divBotones = <HTMLDivElement>document.getElementById('divBotones');
+        this.divBarraBusqueda = <HTMLDivElement>document.getElementById('divBusqueda');
+        this.divAlta = <HTMLDivElement>document.getElementById('divAlta');
+        this.divListado = <HTMLDivElement>document.getElementById('divListado');
+        this.divModificar = <HTMLDivElement>document.getElementById('divModificar');
 
         this.vistaDivBotones = new VistaDivBotones(this, this.divBotones);
         this.vistaBarraBusqueda = new VistaBarraBusqueda(this, this.divBarraBusqueda);
@@ -74,9 +86,9 @@ class Controlador
 
     /**
 		Realizar búsqueda de componentes.
-		@param {String} nombre Nombre del componente.
+		@param {string} nombre Nombre del componente.
 	**/
-	buscarComponentes(nombre)
+	buscarComponentes(nombre:string)
 	{
 		this.modelo.buscar(nombre);
 	}
@@ -84,7 +96,7 @@ class Controlador
     /**
 		Inserta el elemento en el modelo.
     **/
-    aceptarCRUD(nombre, fecha, precio, descripcion, tipo, imagen, seguro1, seguro2, seguro3) 
+    aceptarCRUD(nombre:string, fecha:string, precio:string, descripcion:string, tipo:string, imagen:File, seguro1:boolean, seguro2:boolean, seguro3:boolean) 
     {
         this.modelo.insertar(nombre, fecha, precio, descripcion, tipo, imagen, seguro1, seguro2, seguro3);
     }
@@ -92,7 +104,7 @@ class Controlador
     /**
 		Atención al click en el icono editar del CRUD.
 	**/
-	actualizarCRUD(id, nombre, fecha, precio, descripcion, tipo, imagen, seguro1, seguro2, seguro3)
+	actualizarCRUD(id:number, nombre:string, fecha:string, precio:string, descripcion:string, tipo:string, imagen:File, seguro1:boolean, seguro2:boolean, seguro3:boolean)
 	{
 		this.modelo.procesarComponente(id, nombre, fecha, precio, descripcion, tipo, imagen, seguro1, seguro2, seguro3);
 	}
@@ -100,9 +112,9 @@ class Controlador
     /**
 		Atención al click en el icono eliminar del CRUD.
 		Elimina el elemento en el modelo.
-		@param {Number} id ID del elemento a eliminar.
+		@param {number} id ID del elemento a eliminar.
 	**/
-	eliminarCRUD(id) 
+	eliminarCRUD(id:number) 
     {
 		this.modelo.borrar(id);
 	}
@@ -110,12 +122,12 @@ class Controlador
 	/**
 		Atención al click en el icono editar del CRUD.
 		Manda al formulario de edición.
-		@param {Number} id ID del elemento a editar.
+		@param {number} id ID del elemento a editar.
 	**/
-	editarCRUD(id) 
+	editarCRUD(id:number) 
     {
 		this.pulsarBotonModificar();
-		this.vistaModificar.listado.value = id;
+		this.vistaModificar.listado.value = id.toString();
 		this.vistaModificar.actualizarForm();
 	}
 

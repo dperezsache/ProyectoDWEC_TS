@@ -4,19 +4,36 @@
 	@license GPL-3.0-or-later
 **/
 
-import {Vista} from './vista.js';
+import { Controlador } from '../controller/app.js';
+import { Modelo } from '../model/modelo.js';
+import { Vista } from './vista.js';
 
 /**
 	Vista de la página de modificar.
 **/
 export class VistaModificar extends Vista
 {
+	private modelo: Modelo;
+	public listado: HTMLSelectElement;
+	private campoNombre: HTMLInputElement;
+	private campoFecha: HTMLInputElement;
+	private campoPrecio: HTMLInputElement;
+	private campoDescripcion: HTMLTextAreaElement;
+	private campoTipo: HTMLSelectElement;
+	private campoImagen: HTMLInputElement;
+	private seguro1: HTMLInputElement;
+	private seguro2: HTMLInputElement;
+	private seguro3: HTMLInputElement;
+	private botonCancelar: HTMLButtonElement;
+	private botonAceptar: HTMLButtonElement;
+	private parrafoAviso: HTMLParagraphElement;
+
     /**
 		Constructor de la clase.
 		@param {Controlador} controlador Controlador de la vista.
 		@param {HTMLDivElement} div Div de HTML en el que se desplegará la vista.
 	**/
-    constructor(controlador, div) 
+    constructor(controlador: Controlador, div: HTMLDivElement) 
 	{
         super(controlador, div);
 
@@ -36,7 +53,7 @@ export class VistaModificar extends Vista
 		this.seguro3 = this.div.getElementsByTagName('input')[6];
 		this.botonCancelar = this.div.getElementsByTagName('button')[0];
 		this.botonAceptar = this.div.getElementsByTagName('button')[1];
-		this.parrafoAviso = this.div.getElementsByClassName('pAviso')[0];
+		this.parrafoAviso = <HTMLParagraphElement>this.div.getElementsByClassName('pAviso')[0];
 		
 		// Asignar eventos.
 		this.listado.onclick = this.actualizarForm.bind(this);
@@ -56,7 +73,7 @@ export class VistaModificar extends Vista
 		{
 			for(let componente of componentes) 
 			{
-				if(componente.id == this.listado.value) 
+				if(componente.id == parseInt(this.listado.value)) 
 				{
 					dato = componente;
 					break;
@@ -66,10 +83,10 @@ export class VistaModificar extends Vista
 			if(dato != null) 
 			{
 				this.campoNombre.value = dato.nombre;
-				this.campoFecha.value = dato.fecha;
-				this.campoPrecio.value = dato.precio;
+				this.campoFecha.value = dato.fecha.toString();
+				this.campoPrecio.value = dato.precio.toString();
 				this.campoDescripcion.value = dato.descripcion;
-				this.campoTipo.value = dato.tipo;
+				this.campoTipo.value = dato.tipo.toString();
 				this.seguro1.checked = dato.seguro1;
 				this.seguro2.checked = dato.seguro2;
 				this.seguro3.checked = dato.seguro3;
@@ -97,7 +114,7 @@ export class VistaModificar extends Vista
 			for(let componente of componentes)
 			{
 				let option = document.createElement('option');
-				option.setAttribute('value', componente.id);
+				option.setAttribute('value', componente.id.toString());
 				option.textContent = componente.nombre;
 				this.listado.appendChild(option);
 			}
@@ -114,7 +131,7 @@ export class VistaModificar extends Vista
 		let cont = 0;
 
 		// Validación listado
-		if (this.listado.value != -1)
+		if (parseInt(this.listado.value) != -1)
 		{
 			cont++;
 			this.listado.style.border = colorOk;
@@ -147,7 +164,7 @@ export class VistaModificar extends Vista
 		}
 
 		// Validación precio
-		if (this.campoPrecio.value && !isNaN(this.campoPrecio.value) && this.campoPrecio.value > 0) 
+		if (this.campoPrecio.value && !isNaN(parseInt(this.campoPrecio.value)) && parseInt(this.campoPrecio.value) > 0) 
 		{
 			cont++;
 			this.campoPrecio.style.border = colorOk;
@@ -158,7 +175,7 @@ export class VistaModificar extends Vista
 		}
 
 		// Validación tipo
-		if (this.campoTipo.value != -1)
+		if (parseInt(this.campoTipo.value) != -1)
 		{
 			cont++;
 			this.campoTipo.style.border = colorOk;
@@ -180,7 +197,7 @@ export class VistaModificar extends Vista
 		}
 
 		// Validación imagen
-		if (this.campoImagen.files[0] != null)
+		if (this.campoImagen.files != null)
 		{
 			cont++;
 			this.campoImagen.style.border = colorOk;
@@ -198,13 +215,13 @@ export class VistaModificar extends Vista
 			this.parrafoAviso.innerText = '✔️ Componente actualizado correctamente ✔️';
 
 			this.controlador.actualizarCRUD(
-				this.listado.value,
+				parseInt(this.listado.value),
 				this.campoNombre.value, 
 				this.campoFecha.value, 
 				this.campoPrecio.value,
 				this.campoDescripcion.value, 
 				this.campoTipo.value,
-				this.campoImagen.files[0], 
+				this.campoImagen.files![0], 
 				this.seguro1.checked,
 				this.seguro2.checked,
 				this.seguro3.checked
@@ -227,7 +244,7 @@ export class VistaModificar extends Vista
 		this.campoFecha.value = '';
 		this.campoPrecio.value = '';
 		this.campoDescripcion.value = '';
-		this.campoTipo.value = -1;
+		this.campoTipo.value = '-1';
 		this.campoImagen.value = '';
 		this.seguro1.checked = false;
 		this.seguro2.checked = false;
@@ -243,7 +260,11 @@ export class VistaModificar extends Vista
 			this.listado.firstElementChild.remove();
 	}
 
-	mostrar(ver)
+	/**
+	 * Mostrar/ocultar la vista.
+	 * @param {boolean} ver Muestra/oculta la vista
+	 */
+	mostrar(ver: boolean)
 	{
 		super.mostrar(ver);
 		this.parrafoAviso.style.display = 'none';

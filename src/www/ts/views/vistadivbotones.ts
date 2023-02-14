@@ -4,17 +4,25 @@
 	@license GPL-3.0-or-later
 **/
 
+import { Controlador } from "../controller/app";
+
 /**
 	Implementa una vista del menú de botones.
 **/
 export class VistaDivBotones 
 {
+	private controlador: Controlador;
+	private div: HTMLDivElement;
+	private botonListado: HTMLButtonElement;
+	private botonAlta: HTMLButtonElement;
+	private botonModificar: HTMLButtonElement;
+
     /**
 		Constructor de la clase.
 		@param {Controlador} controlador Controlador de la vista.
 		@param {HTMLDivElement} div Div de HTML en el que se desplegará la vista.
 	**/
-	constructor(controlador, div) 
+	constructor(controlador: Controlador, div: HTMLDivElement) 
 	{
 		this.controlador = controlador;
 		this.div = div;

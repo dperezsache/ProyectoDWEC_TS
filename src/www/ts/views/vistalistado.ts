@@ -4,7 +4,9 @@
 	@license GPL-3.0-or-later
 **/
 
-import {Vista} from './vista.js';
+import { Controlador } from '../controller/app.js';
+import { Modelo } from '../model/modelo.js';
+import { Vista } from './vista.js';
 
 /**
 	Vista del listado.
@@ -12,12 +14,15 @@ import {Vista} from './vista.js';
 **/
 export class VistaListado extends Vista 
 {
+	private modelo: Modelo;
+	private pAviso: HTMLParagraphElement;
+
 	/**
 		Constructor de la clase.
 		@param {Controlador} controlador Controlador de la vista.
 		@param {HTMLDivElement} div Div de HTML en el que se desplegará la vista.
 	**/
-    constructor(controlador, div) 
+    constructor(controlador: Controlador, div: HTMLDivElement) 
 	{
         super(controlador, div);
 		
@@ -25,7 +30,7 @@ export class VistaListado extends Vista
 		this.modelo = this.controlador.getModelo();
 		this.modelo.registrar(this.actualizar.bind(this));
 
-		this.pAviso = this.div.getElementsByClassName('pAviso')[0];
+		this.pAviso = this.div.getElementsByTagName('p')[0];
 	}
 
 	/**
@@ -36,9 +41,9 @@ export class VistaListado extends Vista
 	{
 		this.borrarElementos();
 		
-		let componentes = this.modelo.getLista();
+		const componentes = this.modelo.getLista();
 
-		if(componentes != null && componentes.length > 0) 
+		if (componentes != null && componentes.length > 0) 
 		{
 			this.pAviso.style.display = 'none';
 
@@ -51,8 +56,8 @@ export class VistaListado extends Vista
 
 				// Imagen
 				let img = document.createElement('img');
-				img.width = '256px';
-				img.height = '256px';
+				img.width = 256;
+				img.height = 256;
 				img.style.display = 'block';
 				img.src = componente.imagen;
 				img.alt = componente.nombre;
@@ -121,7 +126,7 @@ export class VistaListado extends Vista
 
 				// Fecha
 				let liFecha = document.createElement('li');
-				let trozos = componente.fecha.split('-');
+				let trozos = componente.fecha.toString().split('-');
 				liFecha.innerHTML = 'Fecha de lanzamiento: <span class="spanFecha">' + trozos[2] + '/' + trozos[1] + '/' + trozos[0] + '</span>';
 				ulInfo.appendChild(liFecha);
 				contenedor.appendChild(ulInfo);
@@ -191,24 +196,24 @@ export class VistaListado extends Vista
 		while(this.div.childNodes.length > 1)
 		{
 			if (this.div.lastChild === this.pAviso) break;
-			else this.div.removeChild(this.div.lastChild);
+			else this.div.removeChild(this.div.lastChild!);
 		} 
 	}
 
 	/**
 		Atención al evento eliminar de una fila.
-		@param {Number} id ID del dato a eliminar.
+		@param {number} id ID del dato a eliminar.
 	**/
-	eliminar(id) 
+	eliminar(id:number) 
 	{
 		this.controlador.eliminarCRUD(id);
 	}
 	
 	/**
 		Atención al evento editar de una fila.
-		@param {Number} id ID del dato a editar.
+		@param {number} id ID del dato a editar.
 	**/
-	editar(id) 
+	editar(id:number) 
 	{
 		this.controlador.editarCRUD(id);
 	}
