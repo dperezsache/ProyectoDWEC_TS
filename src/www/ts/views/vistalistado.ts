@@ -30,7 +30,7 @@ export class VistaListado extends Vista
 		this.modelo = this.controlador.getModelo();
 		this.modelo.registrar(this.actualizar.bind(this));
 
-		this.pAviso = this.div.getElementsByTagName('p')[0];
+		this.pAviso = this.div.getElementsByTagName('p')[0]!;
 	}
 
 	/**

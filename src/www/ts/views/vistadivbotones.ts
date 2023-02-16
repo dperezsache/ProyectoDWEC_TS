@@ -4,7 +4,7 @@
 	@license GPL-3.0-or-later
 **/
 
-import { Controlador } from "../controller/app";
+import { Controlador } from "../controller/app.js";
 
 /**
 	Implementa una vista del menú de botones.
@@ -27,9 +27,9 @@ export class VistaDivBotones
 		this.controlador = controlador;
 		this.div = div;
 		
-		this.botonListado = this.div.getElementsByTagName('button')[0];
-		this.botonAlta = this.div.getElementsByTagName('button')[1];
-        this.botonModificar = this.div.getElementsByTagName('button')[2];
+		this.botonListado = this.div.getElementsByTagName('button')[0]!;
+		this.botonAlta = this.div.getElementsByTagName('button')[1]!;
+        this.botonModificar = this.div.getElementsByTagName('button')[2]!;
 		
 		this.botonListado.onclick = this.pulsarListado.bind(this);
 		this.botonAlta.onclick = this.pulsarAlta.bind(this);

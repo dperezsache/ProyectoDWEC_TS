@@ -41,19 +41,19 @@ export class VistaModificar extends Vista
 		this.modelo.registrar(this.cargarListado.bind(this));
 
 		// Coger referencias de los elementos
-		this.listado = this.div.getElementsByTagName('select')[0];
-		this.campoNombre = this.div.getElementsByTagName('input')[0];
-		this.campoFecha = this.div.getElementsByTagName('input')[1];
-		this.campoPrecio = this.div.getElementsByTagName('input')[2];
-		this.campoDescripcion = this.div.getElementsByTagName('textarea')[0];
-		this.campoTipo = this.div.getElementsByTagName('select')[1];
-		this.campoImagen = this.div.getElementsByTagName('input')[3];
-		this.seguro1 = this.div.getElementsByTagName('input')[4];
-		this.seguro2 = this.div.getElementsByTagName('input')[5];
-		this.seguro3 = this.div.getElementsByTagName('input')[6];
-		this.botonCancelar = this.div.getElementsByTagName('button')[0];
-		this.botonAceptar = this.div.getElementsByTagName('button')[1];
-		this.parrafoAviso = <HTMLParagraphElement>this.div.getElementsByClassName('pAviso')[0];
+		this.listado = this.div.getElementsByTagName('select')[0]!;
+		this.campoNombre = this.div.getElementsByTagName('input')[0]!;
+		this.campoFecha = this.div.getElementsByTagName('input')[1]!;
+		this.campoPrecio = this.div.getElementsByTagName('input')[2]!;
+		this.campoDescripcion = this.div.getElementsByTagName('textarea')[0]!;
+		this.campoTipo = this.div.getElementsByTagName('select')[1]!;
+		this.campoImagen = this.div.getElementsByTagName('input')[3]!;
+		this.seguro1 = this.div.getElementsByTagName('input')[4]!;
+		this.seguro2 = this.div.getElementsByTagName('input')[5]!;
+		this.seguro3 = this.div.getElementsByTagName('input')[6]!;
+		this.botonCancelar = this.div.getElementsByTagName('button')[0]!;
+		this.botonAceptar = this.div.getElementsByTagName('button')[1]!;
+		this.parrafoAviso = <HTMLParagraphElement>this.div.getElementsByClassName('pAviso')[0]!;
 		
 		// Asignar eventos.
 		this.listado.onclick = this.actualizarForm.bind(this);
@@ -197,7 +197,7 @@ export class VistaModificar extends Vista
 		}
 
 		// Validación imagen
-		if (this.campoImagen.files != null)
+		if (this.campoImagen.files![0] != null)
 		{
 			cont++;
 			this.campoImagen.style.border = colorOk;
@@ -221,7 +221,7 @@ export class VistaModificar extends Vista
 				this.campoPrecio.value,
 				this.campoDescripcion.value, 
 				this.campoTipo.value,
-				this.campoImagen.files![0], 
+				this.campoImagen.files![0]!, 
 				this.seguro1.checked,
 				this.seguro2.checked,
 				this.seguro3.checked

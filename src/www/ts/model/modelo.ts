@@ -4,12 +4,13 @@
 	@license GPL-3.0-or-later
 **/
 
-import { Controlador } from "../controller/app";
-
+/**
+ * Interfaz para los componentes (objetos almacenados en IDB)
+ */
 interface Componente {
 	id: number;
 	nombre: string;
-	fecha: Date;
+	fecha: string;
 	precio: string; 
 	descripcion: string; 
 	tipo: string; 
@@ -25,14 +26,12 @@ interface Componente {
 **/
 export class Modelo 
 {
-	private controlador: Controlador;
 	private callbacks: Function[];
 	private listaComponentes!: Componente[];
 	private db!: IDBDatabase;
 
-    constructor(controlador: Controlador) 
+    constructor() 
 	{
-		this.controlador = controlador;
 		this.callbacks = [];
 		this.conectarDB();
     }
@@ -42,23 +41,19 @@ export class Modelo
 	**/
 	conectarDB() 
 	{
-		const peticion: IDBOpenDBRequest = window.indexedDB.open('ComponentesDB', 1);
+		const peticion = indexedDB.open('ComponentesDB');
 
-		peticion.onsuccess = (event) => {
-			if(event.target != null) {
-				this.db = <IDBDatabase>event.target;
-				this.obtenerRegistros();
-			}
+		peticion.onsuccess = () => {
+			this.db = peticion.result;
+			this.obtenerRegistros();
 		}
 
-		peticion.onupgradeneeded = (event) => {
-			if(event.target != null) {
-				this.db = <IDBDatabase>event.target;
-				this.db.createObjectStore('tablaComponentes', { keyPath: 'id', autoIncrement: true });
-			}
+		peticion.onupgradeneeded = () => {
+			this.db = peticion.result;
+			this.db.createObjectStore('tablaComponentes', { keyPath: 'id', autoIncrement: true });
 		}
 
-		peticion.onerror = () => console.error('Error al conectar con la BBDD');
+		peticion.onerror = (err) => console.error(`Error de IndexedDB: ${peticion.error} ` + err);
 	}
 
 	/**
@@ -132,11 +127,9 @@ export class Modelo
 	procesarComponente(id:number, nombre:string, fecha:string, precio:string, descripcion:string, tipo:string, imagen:File, seguro1:boolean, seguro2:boolean, seguro3:boolean)
 	{
 		const peticion = this.db.transaction('tablaComponentes', 'readwrite').objectStore('tablaComponentes').get(<IDBValidKey>id);
-		peticion.onsuccess = (event) => {
-			if(event.target != null) {
-				const datos = <Componente>(event.target as Object);
-				this.actualizarComponente(datos, nombre, fecha, precio, descripcion, tipo, imagen, seguro1, seguro2, seguro3);
-			}
+		peticion.onsuccess = () => {
+			const datos = <Componente>peticion.result;
+			this.actualizarComponente(datos, nombre, fecha, precio, descripcion, tipo, imagen, seguro1, seguro2, seguro3);
 		}
 	}
 
@@ -156,7 +149,7 @@ export class Modelo
 	actualizarComponente(datos:Componente, nombre:string, fecha:string, precio:string, descripcion:string, tipo:string, imagen:File, seguro1:boolean, seguro2:boolean, seguro3:boolean) 
 	{
 		datos.nombre = nombre;
-		datos.fecha = new Date(fecha);
+		datos.fecha = fecha;
 		datos.precio = precio;
 		datos.descripcion = descripcion;
 		datos.tipo = tipo;
@@ -167,8 +160,9 @@ export class Modelo
 		let reader = new FileReader();
 		reader.readAsDataURL(imagen);
 		reader.onload = () => {
-			datos.imagen = (reader.result as string);
-			const peticion = this.db.transaction('tablaComponentes', 'readwrite').objectStore('tablaComponentes').put(datos);
+			datos.imagen = <string>reader.result;
+			const serializado = JSON.parse(JSON.stringify(datos));
+			const peticion = this.db.transaction('tablaComponentes', 'readwrite').objectStore('tablaComponentes').put(serializado);
 			peticion.onsuccess = () => this.obtenerRegistros();
 		}
 	}

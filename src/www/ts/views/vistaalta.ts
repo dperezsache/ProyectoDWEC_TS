@@ -4,8 +4,8 @@
 	@license GPL-3.0-or-later
 **/
 
-import { Controlador } from '../controller/app';
-import { Vista } from './vista';
+import { Controlador } from '../controller/app.js';
+import { Vista } from './vista.js';
 
 /**
 	Vista del alta.
@@ -36,18 +36,18 @@ export class VistaAlta extends Vista
         super(controlador, div);
 
 		// Coger referencias de los elementos
-		this.campoNombre = this.div.getElementsByTagName('input')[0];
-		this.campoFecha = this.div.getElementsByTagName('input')[1];
-		this.campoPrecio = this.div.getElementsByTagName('input')[2];
-		this.campoDescripcion = this.div.getElementsByTagName('textarea')[0];
-		this.campoTipo = this.div.getElementsByTagName('select')[0];
-		this.campoImagen = this.div.getElementsByTagName('input')[3];
-		this.seguro1 = this.div.getElementsByTagName('input')[4];
-		this.seguro2 = this.div.getElementsByTagName('input')[5];
-		this.seguro3 = this.div.getElementsByTagName('input')[6];
-		this.botonCancelar = this.div.getElementsByTagName('button')[0];
-		this.botonAceptar = this.div.getElementsByTagName('button')[1];
-		this.parrafoAviso = this.div.getElementsByTagName('p')[0];
+		this.campoNombre = this.div.getElementsByTagName('input')[0]!;
+		this.campoFecha = this.div.getElementsByTagName('input')[1]!;
+		this.campoPrecio = this.div.getElementsByTagName('input')[2]!;
+		this.campoDescripcion = this.div.getElementsByTagName('textarea')[0]!;
+		this.campoTipo = this.div.getElementsByTagName('select')[0]!;
+		this.campoImagen = this.div.getElementsByTagName('input')[3]!;
+		this.seguro1 = this.div.getElementsByTagName('input')[4]!;
+		this.seguro2 = this.div.getElementsByTagName('input')[5]!;
+		this.seguro3 = this.div.getElementsByTagName('input')[6]!;
+		this.botonCancelar = this.div.getElementsByTagName('button')[0]!;
+		this.botonAceptar = this.div.getElementsByTagName('button')[1]!;
+		this.parrafoAviso = this.div.getElementsByTagName('p')[0]!;
 		
 		this.botonAceptar.onclick = this.aceptar.bind(this);
 		this.botonCancelar.onclick = this.cancelar.bind(this);
@@ -118,7 +118,7 @@ export class VistaAlta extends Vista
 		}
 
 		// Validación imagen
-		if (this.campoImagen.files != null)
+		if (this.campoImagen.files![0] != null)
 		{
 			cont++;
 			this.campoImagen.style.border = colorOk;
@@ -141,7 +141,7 @@ export class VistaAlta extends Vista
 				this.campoPrecio.value,
 				this.campoDescripcion.value, 
 				this.campoTipo.value,
-				this.campoImagen.files![0], 
+				this.campoImagen.files![0]!, 
 				this.seguro1.checked,
 				this.seguro2.checked,
 				this.seguro3.checked

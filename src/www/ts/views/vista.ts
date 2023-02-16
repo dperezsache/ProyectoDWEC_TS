@@ -3,7 +3,7 @@
 	@author David Pérez Saché <dperezsache.guadalupe@alumnado.fundacionloyola.es>
 	@license GPL-3.0-or-later
 **/
-import {Controlador} from '../controller/app';
+import {Controlador} from '../controller/app.js';
 
 /**
 	Implementa una vista.

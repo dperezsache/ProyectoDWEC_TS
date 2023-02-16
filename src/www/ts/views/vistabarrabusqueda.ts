@@ -25,8 +25,8 @@ export class VistaBarraBusqueda extends Vista
 	{
         super(controlador, div);
 
-		this.campoBuscar = this.div.getElementsByTagName('input')[0];
-		this.botonBuscar = this.div.getElementsByTagName('button')[0];
+		this.campoBuscar = this.div.getElementsByTagName('input')[0]!;
+		this.botonBuscar = this.div.getElementsByTagName('button')[0]!;
 
 		this.botonBuscar.onclick = this.busqueda.bind(this);
     }

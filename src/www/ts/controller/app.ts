@@ -1,20 +1,20 @@
-import { Modelo } from "../model/modelo";
-import { VistaAlta } from "../views/vistaalta";
-import { VistaDivBotones } from "../views/vistadivbotones";
-import { VistaListado } from "../views/vistalistado";
-import { VistaModificar } from "../views/vistamodificar";
-import { VistaBarraBusqueda } from "../views/vistabarrabusqueda";
+import { Modelo } from "../model/modelo.js";
+import { VistaAlta } from "../views/vistaalta.js";
+import { VistaListado } from "../views/vistalistado.js";
+import { VistaModificar } from "../views/vistamodificar.js";
+import { VistaDivBotones } from "../views/vistadivbotones.js";
+import { VistaBarraBusqueda } from "../views/vistabarrabusqueda.js";
 
 export class Controlador 
 {
 	private modelo!: Modelo;
-	private divBotones!: HTMLDivElement;
 	private divBarraBusqueda!: HTMLDivElement;
+	private divBotones!: HTMLDivElement;
 	private divAlta!: HTMLDivElement;
 	private divListado!: HTMLDivElement;
 	private divModificar!: HTMLDivElement;
-	private vistaDivBotones!: VistaDivBotones;
 	private vistaBarraBusqueda!: VistaBarraBusqueda;
+	private vistaBotones!: VistaDivBotones;
 	private vistaAlta!: VistaAlta;
 	private vistaListado!: VistaListado;
 	private vistaModificar!: VistaModificar;
@@ -34,16 +34,16 @@ export class Controlador
      */
     iniciar() 
     {
-        this.modelo = new Modelo(this);
+        this.modelo = new Modelo();
 
-        this.divBotones = <HTMLDivElement>document.getElementById('divBotones');
         this.divBarraBusqueda = <HTMLDivElement>document.getElementById('divBusqueda');
+		this.divBotones = <HTMLDivElement>document.getElementById('divBotones');
         this.divAlta = <HTMLDivElement>document.getElementById('divAlta');
         this.divListado = <HTMLDivElement>document.getElementById('divListado');
         this.divModificar = <HTMLDivElement>document.getElementById('divModificar');
 
-        this.vistaDivBotones = new VistaDivBotones(this, this.divBotones);
         this.vistaBarraBusqueda = new VistaBarraBusqueda(this, this.divBarraBusqueda);
+		this.vistaBotones = new VistaDivBotones(this, this.divBotones);
         this.vistaAlta = new VistaAlta(this, this.divAlta);
         this.vistaListado = new VistaListado(this, this.divListado);
         this.vistaModificar = new VistaModificar(this, this.divModificar);
@@ -141,4 +141,4 @@ export class Controlador
 	}
 }
 
-const app = new Controlador();
+new Controlador();
