@@ -37,7 +37,7 @@ export class VistaListado extends Vista
 		Recibe el aviso del modelo cuando ha sido actualizado.
 		Actualiza los datos de la vista.
 	**/
-	actualizar() 
+	actualizar():void
 	{
 		this.borrarElementos();
 		
@@ -90,7 +90,8 @@ export class VistaListado extends Vista
 				// Tipo
 				let ulInfo = document.createElement('ul');
 				let liTipo = document.createElement('li');
-				let tipo;
+				let tipo:string;
+				
 				switch(parseInt(componente.tipo))
 				{
 					case 1:
@@ -191,7 +192,7 @@ export class VistaListado extends Vista
 	/**
 	 * Borra los elementos del listado.
 	 */
-	borrarElementos() 
+	borrarElementos():void
 	{
 		while(this.div.childNodes.length > 1)
 		{
@@ -204,7 +205,7 @@ export class VistaListado extends Vista
 		Atención al evento eliminar de una fila.
 		@param {number} id ID del dato a eliminar.
 	**/
-	eliminar(id:number) 
+	eliminar(id:number):void
 	{
 		this.controlador.eliminarCRUD(id);
 	}
@@ -213,7 +214,7 @@ export class VistaListado extends Vista
 		Atención al evento editar de una fila.
 		@param {number} id ID del dato a editar.
 	**/
-	editar(id:number) 
+	editar(id:number):void
 	{
 		this.controlador.editarCRUD(id);
 	}

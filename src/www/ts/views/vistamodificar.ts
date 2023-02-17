@@ -124,7 +124,7 @@ export class VistaModificar extends Vista
 	/**
 		Atención al click de aceptar actualización.
 	**/
-	aceptar()
+	aceptar():void
 	{
 		const colorOk = '1px solid #ADACAC'; 
 		const colorMal = '1px solid crimson';
@@ -238,7 +238,7 @@ export class VistaModificar extends Vista
 	/**
 		Limpiar los campos del formulario.
 	**/
-	cancelar()
+	cancelar():void
 	{
 		this.campoNombre.value = '';
 		this.campoFecha.value = '';

@@ -34,7 +34,7 @@ export class VistaBarraBusqueda extends Vista
 	/**
 		Realiza búsqueda de componentes
 	**/
-	busqueda()
+	busqueda():void
 	{
 		this.controlador.buscarComponentes(this.campoBuscar.value);
 	}

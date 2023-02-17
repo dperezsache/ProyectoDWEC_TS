@@ -7,7 +7,8 @@
 /**
  * Interfaz para los componentes (objetos almacenados en IDB)
  */
-interface Componente {
+interface Componente 
+{
 	id: number;
 	nombre: string;
 	fecha: string;
@@ -39,7 +40,7 @@ export class Modelo
 	/**
 		Iniciar conexión con la base de datos.
 	**/
-	conectarDB() 
+	conectarDB():void
 	{
 		const peticion = indexedDB.open('ComponentesDB');
 
@@ -60,7 +61,7 @@ export class Modelo
 		Registra un objeto para informarle de los cambios en el Modelo.
 		@param {Function} callback Función de callback que será llamada cuando cambien los datos.
 	**/
-	registrar(callback: Function) 
+	registrar(callback:Function):void
 	{
 		this.callbacks.push(callback);
 	}
@@ -68,7 +69,7 @@ export class Modelo
 	/**
 		Ejecuta todos los callback registrados.
 	**/
-	avisar() 
+	avisar():void 
 	{
 		for(let callback of this.callbacks) 
 			callback();
@@ -86,7 +87,7 @@ export class Modelo
 		@param {boolean} seguro2 Seguro nº 2.
 		@param {boolean} seguro3 Seguro nº 3.
 	**/
-	insertar(nombre:string, fecha:string, precio:string, descripcion:string, tipo:string, imagen:File, seguro1:boolean, seguro2:boolean, seguro3:boolean) 
+	insertar(nombre:string, fecha:string, precio:string, descripcion:string, tipo:string, imagen:File, seguro1:boolean, seguro2:boolean, seguro3:boolean):void
 	{
 		// Transformar imagen a base64
 		let reader = new FileReader();
@@ -124,7 +125,7 @@ export class Modelo
 		@param {boolean} seguro2 Seguro nº 2.
 		@param {boolean} seguro3 Seguro nº 3.
 	**/
-	procesarComponente(id:number, nombre:string, fecha:string, precio:string, descripcion:string, tipo:string, imagen:File, seguro1:boolean, seguro2:boolean, seguro3:boolean)
+	procesarComponente(id:number, nombre:string, fecha:string, precio:string, descripcion:string, tipo:string, imagen:File, seguro1:boolean, seguro2:boolean, seguro3:boolean):void
 	{
 		const peticion = this.db.transaction('tablaComponentes', 'readwrite').objectStore('tablaComponentes').get(<IDBValidKey>id);
 		peticion.onsuccess = () => {
@@ -146,7 +147,7 @@ export class Modelo
 		@param {boolean} seguro2 Seguro nº 2.
 		@param {boolean} seguro3 Seguro nº 3.
 	**/
-	actualizarComponente(datos:Componente, nombre:string, fecha:string, precio:string, descripcion:string, tipo:string, imagen:File, seguro1:boolean, seguro2:boolean, seguro3:boolean) 
+	actualizarComponente(datos:Componente, nombre:string, fecha:string, precio:string, descripcion:string, tipo:string, imagen:File, seguro1:boolean, seguro2:boolean, seguro3:boolean):void
 	{
 		datos.nombre = nombre;
 		datos.fecha = fecha;
@@ -161,7 +162,7 @@ export class Modelo
 		reader.readAsDataURL(imagen);
 		reader.onload = () => {
 			datos.imagen = <string>reader.result;
-			const serializado = JSON.parse(JSON.stringify(datos));
+			const serializado: JSON = JSON.parse(JSON.stringify(datos));
 			const peticion = this.db.transaction('tablaComponentes', 'readwrite').objectStore('tablaComponentes').put(serializado);
 			peticion.onsuccess = () => this.obtenerRegistros();
 		}
@@ -171,7 +172,7 @@ export class Modelo
 		Elimina un registro de la BBDD.
 		@param {number} id Nº identificador del registro a eliminar.
 	**/
-	borrar(id:number)
+	borrar(id:number):void
 	{
 		const peticion = this.db.transaction('tablaComponentes', 'readwrite').objectStore('tablaComponentes').delete(<IDBValidKey>id);
 		peticion.onsuccess = () => this.obtenerRegistros();
@@ -180,7 +181,7 @@ export class Modelo
 	/**
 		Devuelve los registros de la base de datos a un array en el modelo, después llama a los callbacks.
 	**/
-	obtenerRegistros() 
+	obtenerRegistros():void
 	{
 		const peticion = this.db.transaction('tablaComponentes', 'readonly').objectStore('tablaComponentes').getAll();
 		
@@ -194,7 +195,7 @@ export class Modelo
 		Busca componentes que contengan el nombre o parte del nombre.
 		@param {string} nombre Nombre del componente.
 	**/
-	buscar(nombre:string)
+	buscar(nombre:string):void
 	{
 		if(!nombre)	// Si el nombre está en blanco, recuperar los registros.
 		{
@@ -205,7 +206,7 @@ export class Modelo
 			const peticion = this.db.transaction('tablaComponentes', 'readonly').objectStore('tablaComponentes').getAll();
 
 			peticion.onsuccess = () => {
-				const componentes = peticion.result;
+				const componentes:Componente[] = peticion.result;
 				this.listaComponentes = [];	// Limpiar la lista de componentes
 	
 				for(let componente of componentes)

@@ -39,7 +39,7 @@ export class VistaDivBotones
     /**
 		Atención a la pulsación sobre el enlace de listado
 	**/
-	pulsarListado() 
+	pulsarListado():void
 	{
 		this.controlador.pulsarBotonListado();
 	}
@@ -47,7 +47,7 @@ export class VistaDivBotones
 	/**
 		Atención a la pulsación sobre el enlace de CRUD
 	**/
-	pulsarAlta() 
+	pulsarAlta():void
 	{
 		this.controlador.pulsarBotonAlta();
 	}
@@ -55,7 +55,7 @@ export class VistaDivBotones
 	/**
 		Atención a la pulsación sobre el enlace de actualizar
 	**/
-	pulsarModificar() 
+	pulsarModificar():void
 	{
 		this.controlador.pulsarBotonModificar();
 	}

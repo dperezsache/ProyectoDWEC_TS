@@ -54,7 +54,7 @@ export class Controlador
     /**
 		Atención a la pulsación sobre el botón de listado
 	**/
-    pulsarBotonListado() 
+    pulsarBotonListado():void
     {
         this.vistaListado.mostrar(true);
         this.vistaBarraBusqueda.mostrar(true);
@@ -65,7 +65,7 @@ export class Controlador
     /**
 		Atención a la pulsación sobre el botón de alta
 	**/
-    pulsarBotonAlta() 
+    pulsarBotonAlta():void
     {
         this.vistaListado.mostrar(false);
         this.vistaBarraBusqueda.mostrar(false);
@@ -76,7 +76,7 @@ export class Controlador
     /**
 		Atención a la pulsación sobre el botón de modificar
 	**/
-    pulsarBotonModificar() 
+    pulsarBotonModificar():void
     {
         this.vistaListado.mostrar(false);
         this.vistaBarraBusqueda.mostrar(false);
@@ -88,7 +88,7 @@ export class Controlador
 		Realizar búsqueda de componentes.
 		@param {string} nombre Nombre del componente.
 	**/
-	buscarComponentes(nombre:string)
+	buscarComponentes(nombre:string):void
 	{
 		this.modelo.buscar(nombre);
 	}
@@ -96,7 +96,7 @@ export class Controlador
     /**
 		Inserta el elemento en el modelo.
     **/
-    aceptarCRUD(nombre:string, fecha:string, precio:string, descripcion:string, tipo:string, imagen:File, seguro1:boolean, seguro2:boolean, seguro3:boolean) 
+    aceptarCRUD(nombre:string, fecha:string, precio:string, descripcion:string, tipo:string, imagen:File, seguro1:boolean, seguro2:boolean, seguro3:boolean):void
     {
         this.modelo.insertar(nombre, fecha, precio, descripcion, tipo, imagen, seguro1, seguro2, seguro3);
     }
@@ -104,7 +104,7 @@ export class Controlador
     /**
 		Atención al click en el icono editar del CRUD.
 	**/
-	actualizarCRUD(id:number, nombre:string, fecha:string, precio:string, descripcion:string, tipo:string, imagen:File, seguro1:boolean, seguro2:boolean, seguro3:boolean)
+	actualizarCRUD(id:number, nombre:string, fecha:string, precio:string, descripcion:string, tipo:string, imagen:File, seguro1:boolean, seguro2:boolean, seguro3:boolean):void
 	{
 		this.modelo.procesarComponente(id, nombre, fecha, precio, descripcion, tipo, imagen, seguro1, seguro2, seguro3);
 	}
@@ -114,7 +114,7 @@ export class Controlador
 		Elimina el elemento en el modelo.
 		@param {number} id ID del elemento a eliminar.
 	**/
-	eliminarCRUD(id:number) 
+	eliminarCRUD(id:number):void
     {
 		this.modelo.borrar(id);
 	}
@@ -124,7 +124,7 @@ export class Controlador
 		Manda al formulario de edición.
 		@param {number} id ID del elemento a editar.
 	**/
-	editarCRUD(id:number) 
+	editarCRUD(id:number):void
     {
 		this.pulsarBotonModificar();
 		this.vistaModificar.listado.value = id.toString();
@@ -135,7 +135,7 @@ export class Controlador
 		Devuelve el modelo de la aplicación.
 		@return {Modelo} El modelo de la aplicación.
 	**/
-	getModelo() 
+	getModelo():Modelo
     {
 		return this.modelo;
 	}

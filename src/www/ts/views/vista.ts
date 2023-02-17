@@ -18,7 +18,7 @@ export class Vista
 		@param {Controlador} controlador Controlador de la vista.
 		@param {HTMLDivElement} div Div de HTML en el que se desplegará la vista.
 	**/
-    constructor(controlador:Controlador, div:HTMLDivElement) 
+    constructor(controlador:Controlador, div:HTMLDivElement)
 	{
 		this.controlador = controlador;
         this.div = div;
@@ -28,7 +28,7 @@ export class Vista
 		Muestra u oculta el div principal de la vista.
 		@param {boolean} ver True muestra la vista y false la oculta.
 	**/
-	mostrar(ver:boolean)
+	mostrar(ver:boolean):void
 	{
 		if(ver) 
 		{

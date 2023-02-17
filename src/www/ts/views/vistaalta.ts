@@ -158,7 +158,7 @@ export class VistaAlta extends Vista
 	/**
 		Limpiar los campos del formulario.
 	**/
-	cancelar() 
+	cancelar():void
 	{
 		this.campoNombre.value = '';
 		this.campoFecha.value = '';
